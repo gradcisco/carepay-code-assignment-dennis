@@ -15,9 +15,10 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Entity
+@SequenceGenerator(name = "post_seq_gen", sequenceName = "post_seq", initialValue = 1, allocationSize = 1)
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "post_seq_gen")
     private Long id;
     private String title;
     private String content;
