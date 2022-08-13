@@ -3,6 +3,9 @@ package com.carepay.assignment.controller;
 import com.carepay.assignment.dto.UserRequest;
 import com.carepay.assignment.model.BlogUser;
 import com.carepay.assignment.service.UserService;
+import com.carepay.assignment.service.UserServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +16,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@Api(tags = "users")
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @PostMapping
     public ResponseEntity<BlogUser> createUser(@RequestBody UserRequest userRequest){
@@ -26,6 +30,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "This method is used to update a blog users with the given identifier")
     public ResponseEntity<BlogUser> updateUser(@RequestBody UserRequest userRequest,@PathVariable Long id){
 
 

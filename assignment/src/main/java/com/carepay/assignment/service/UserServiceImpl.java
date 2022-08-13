@@ -6,6 +6,7 @@ import com.carepay.assignment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService {
         BlogUser user = new BlogUser();
 
         user.setUserName(userRequest.getUserName());
-        user.setUserPassword(userRequest.getUserPassword());
+        user.setUserPassword(new BCryptPasswordEncoder().encode(userRequest.getUserPassword()));
 
         user = userRepository.save(user);
         System.out.println(user);
