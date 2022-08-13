@@ -42,25 +42,36 @@ public class PostServiceImpl implements PostService {
 
         postRepository.save(post);
 
-        PostDetails postDetails = new PostDetails(post.getContent());
+        PostDetails postDetails = new PostDetails();
+        postDetails.setContent(post.getContent());
+        postDetails.setCreatedBy(post.getBlogUser().getUserName());
+        postDetails.setCreationDate(post.getCreationDate());
 
         return postDetails;
 
     }
 
     @Override
-    public Page<PostInfo> getPosts(Pageable pageable) {
-        throw new IllegalArgumentException("Not implemented"); // TODO: Implement
+    public Page<Post> getPosts(Pageable pageable) {
+
+        return postRepository.findAll(pageable);
     }
 
     @Override
     public PostDetails getPostDetails(Long id) {
-        throw new IllegalArgumentException("Not implemented"); // TODO: Implement
+        Post post = postRepository.findById(id).orElseThrow();
+        PostDetails pd = new PostDetails();
+        pd.setContent(post.getContent());
+        pd.setCreatedBy(post.getBlogUser().getUserName());
+        pd.setCreationDate(post.getCreationDate());
+
+        return pd;
     }
 
     @Override
     public void deletePost(Long id) {
-        throw new IllegalArgumentException("Not implemented"); // TODO: Implement
+        postRepository.deleteById(id);
+
     }
 }
 

@@ -3,6 +3,7 @@ package com.carepay.assignment.controller;
 import javax.validation.Valid;
 
 import com.carepay.assignment.domain.CreatePostRequest;
+import com.carepay.assignment.domain.Post;
 import com.carepay.assignment.domain.PostDetails;
 import com.carepay.assignment.domain.PostInfo;
 import com.carepay.assignment.service.PostService;
@@ -28,7 +29,8 @@ public class PostController {
     private PostService postService;
 
     @GetMapping
-    Page<PostInfo> getPosts(Pageable pageable) {
+    Page<Post> getPosts(Pageable pageable) {
+
 
         return postService.getPosts(pageable);
     }
@@ -40,6 +42,7 @@ public class PostController {
     }
 
     @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
     PostDetails getPostDetails(@PathVariable("id") final Long id) {
 
         return postService.getPostDetails(id);
