@@ -8,12 +8,13 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 
 @Data
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "build")
 @NoArgsConstructor
 @ToString
 @Entity
@@ -22,12 +23,12 @@ public class BlogUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true,nullable = false)
+    @NotBlank(message = "username cannot be blank")
+    @Column(unique = true)
     private String userName;
+
+    @NotBlank(message = "Password cannot be blank")
     private String userPassword;
 
-
-    @ManyToOne
-    private Post post;
 
 }

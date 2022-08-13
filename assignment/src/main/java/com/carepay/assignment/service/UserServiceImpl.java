@@ -1,5 +1,6 @@
 package com.carepay.assignment.service;
 
+import com.carepay.assignment.dto.UserRequest;
 import com.carepay.assignment.model.BlogUser;
 import com.carepay.assignment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public BlogUser createUser(BlogUser user) {
-        userRepository.save(user);
+    public BlogUser createUser(UserRequest userRequest) {
+        BlogUser user = BlogUser
+                .build(0L,userRequest.getUserName(), userRequest.getUserPassword());
+
+        user = userRepository.save(user);
+        System.out.println(user);
         return user;
     }
 

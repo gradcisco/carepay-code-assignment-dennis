@@ -1,9 +1,11 @@
 package com.carepay.assignment.controller;
 
+import com.carepay.assignment.dto.UserRequest;
 import com.carepay.assignment.model.BlogUser;
 import com.carepay.assignment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,10 +19,10 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BlogUser createUser(@RequestBody BlogUser user){
+    public ResponseEntity<BlogUser> createUser(@RequestBody UserRequest userRequest){
 
-        userService.createUser(user);
-        return user;
+
+        return new ResponseEntity<>(userService.createUser(userRequest),HttpStatus.CREATED);
     }
 
     @GetMapping
