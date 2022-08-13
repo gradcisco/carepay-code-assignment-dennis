@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +22,11 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_seq_gen")
     private Long id;
     private String comment;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "comment_date", nullable = false, updatable = false)
+    private Date creationDate;
 
     @ManyToOne
     private Post post;
