@@ -40,16 +40,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BlogUser updateUser(UserRequest userRequest,Long id) {
-        BlogUser user = new BlogUser();
-        user.setId(id);
+        
+        BlogUser user = userRepository.findById(id).orElseThrow();
 
-        user.setUserName(userRequest.getUserName());
-        user.setUserPassword(userRequest.getUserPassword());
-
-        user.setLastLoginDate(Date.from(Instant.now()));
+        user.setUserPassword(new BCryptPasswordEncoder().encode(userRequest.getUserPassword()));
         user = userRepository.save(user);
-
-        System.out.println(user);
 
         return user;
     }

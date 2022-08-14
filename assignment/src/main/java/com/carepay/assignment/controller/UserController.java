@@ -22,12 +22,6 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @PostMapping
-    public ResponseEntity<BlogUser> createUser(@RequestBody UserRequest userRequest){
-
-        return new ResponseEntity<>(userService.createUser(userRequest),HttpStatus.CREATED);
-    }
-
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "This method is used to update a blog users with the given identifier")
