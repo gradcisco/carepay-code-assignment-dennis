@@ -2,7 +2,9 @@ package com.carepay.assignment.jwtutils;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -40,7 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } else {
             System.out.println("Bearer String not found in token");
         }
-        if (null != username &&SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (null != username && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (tokenManager.validateJwtToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken
@@ -53,5 +55,15 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    public String getPrincipal(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String user = "";
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            user  = authentication.getName();
+        }
+
+        return user;
     }
 }

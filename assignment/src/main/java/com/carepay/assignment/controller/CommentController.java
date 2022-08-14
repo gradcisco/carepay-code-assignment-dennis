@@ -1,6 +1,7 @@
 package com.carepay.assignment.controller;
 
 import com.carepay.assignment.dto.CommentDto;
+import com.carepay.assignment.jwtutils.JwtFilter;
 import com.carepay.assignment.model.Comment;
 import com.carepay.assignment.service.CommentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +18,28 @@ public class CommentController {
     @Autowired
     private CommentServiceImpl commentService;
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
     @PostMapping
-    public ResponseEntity<HttpStatus> addComment(@RequestBody CommentDto commentDto){
+    public ResponseEntity<Comment> addComment(@RequestBody CommentDto commentDto){
 
-        commentService.addComment(commentDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(commentService.addComment(commentDto),HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<Comment>> getCommentsByPostId(@PathVariable Long id){
-        return new ResponseEntity<>(commentService.getCommentsByPostId(id),HttpStatus.CREATED);
+    @PutMapping("{commentid}")
+    public ResponseEntity<Comment> updateComment(@RequestBody CommentDto commentDto,@PathVariable Long commentid) throws Exception {
+
+        return new ResponseEntity<>(commentService.updateComment(commentDto,commentid,jwtFilter.getPrincipal()),HttpStatus.CREATED);
+    }
+    @GetMapping("/{postid}")
+    public ResponseEntity<List<Comment>> getCommentsByPostId(@PathVariable Long postid){
+        return new ResponseEntity<>(commentService.getCommentsByPostId(postid),HttpStatus.CREATED);
     }
 
-
-
-    @DeleteMapping
-    public ResponseEntity<HttpStatus> deleteComment(){
-
+    @DeleteMapping("{commentid")
+    public ResponseEntity<HttpStatus> deleteComment(@PathVariable Long commentid) throws Exception {
+        commentService.deleteComment(commentid,jwtFilter.getPrincipal());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

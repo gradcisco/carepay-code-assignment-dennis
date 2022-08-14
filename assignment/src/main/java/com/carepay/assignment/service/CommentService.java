@@ -14,9 +14,13 @@ import java.util.List;
 
 public interface CommentService {
 
-    public void addComment(@RequestBody CommentDto commentDto);
+     Comment addComment(@RequestBody CommentDto commentDto);
 
-    public ResponseEntity<HttpStatus> deleteComment();
+     ResponseEntity<HttpStatus> deleteComment();
 
-    public List<Comment> getCommentsByPostId(Long id);
+     List<Comment> getCommentsByPostId(Long id);
+
+     void deleteComment(Long id, String principal) throws Exception;
+
+    Comment updateComment(CommentDto commentDto, Long id, String principal) throws Exception;
 }

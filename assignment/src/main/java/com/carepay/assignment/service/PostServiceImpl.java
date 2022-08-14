@@ -4,7 +4,6 @@ package com.carepay.assignment.service;
 import com.carepay.assignment.domain.CreatePostRequest;
 import com.carepay.assignment.domain.Post;
 import com.carepay.assignment.domain.PostDetails;
-import com.carepay.assignment.domain.PostInfo;
 import com.carepay.assignment.model.BlogUser;
 import com.carepay.assignment.repository.PostRepository;
 import com.carepay.assignment.repository.UserRepository;
@@ -43,6 +42,7 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
 
         PostDetails postDetails = new PostDetails();
+        postDetails.setId(post.getId());
         postDetails.setContent(post.getContent());
         postDetails.setCreatedBy(post.getBlogUser().getUserName());
         postDetails.setCreationDate(post.getCreationDate());
@@ -61,6 +61,7 @@ public class PostServiceImpl implements PostService {
     public PostDetails getPostDetails(Long id) {
         Post post = postRepository.findById(id).orElseThrow();
         PostDetails pd = new PostDetails();
+        pd.setId(post.getId());
         pd.setContent(post.getContent());
         pd.setCreatedBy(post.getBlogUser().getUserName());
         pd.setCreationDate(post.getCreationDate());
@@ -69,9 +70,40 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(Long id) {
+    public void deletePost(Long id,String principal) throws Exception {
+        Post post = postRepository.findById(id).orElseThrow();
+        if(!post.getBlogUser().getUserName().equalsIgnoreCase(principal))
+            throw new Exception("Cannot delete a post by another user");
         postRepository.deleteById(id);
 
+    }
+
+    @Override
+    public PostDetails updatePost(CreatePostRequest createPostRequest, String principal,Long id) throws Exception {
+        Post post = postRepository.findById(id).orElseThrow();
+
+        if(!post.getBlogUser().getUserName().equalsIgnoreCase(principal))
+            throw new Exception("Cannot update a post by another user");
+
+        post.setContent(createPostRequest.getContent());
+        post.setTitle(createPostRequest.getTitle());
+        post = postRepository.save(post);
+
+        PostDetails postDetails = new PostDetails();
+        postDetails.setId(post.getId());
+        postDetails.setContent(post.getContent());
+        postDetails.setCreatedBy(post.getBlogUser().getUserName());
+        postDetails.setCreationDate(post.getCreationDate());
+
+        return postDetails;
+    }
+
+    @Override
+    public List<Post> getPostDetailsByUser(String postedby) {
+
+        BlogUser user = userRepository.findByUserName(postedby).orElseThrow();
+
+        return postRepository.findByBlogUserId(user.getId());
     }
 }
 

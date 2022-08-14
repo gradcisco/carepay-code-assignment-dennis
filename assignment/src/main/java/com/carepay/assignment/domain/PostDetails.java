@@ -7,13 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.Date;
-import java.util.List;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class PostDetails extends PostInfo {
+    private Long id;
     private String content;
     private String createdBy;
     private Date creationDate;

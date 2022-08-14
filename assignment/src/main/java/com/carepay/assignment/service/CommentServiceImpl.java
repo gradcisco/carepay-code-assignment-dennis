@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService{
     private PostRepository postRepository;
 
     @Override
-    public void addComment(CommentDto commentDto) {
+    public Comment addComment(CommentDto commentDto) {
 
         //get user
         Optional<BlogUser> blogUser = userRepository.findByUserName(commentDto.getUserName());
@@ -47,7 +47,9 @@ public class CommentServiceImpl implements CommentService{
         comment.setUser(blogUser.get());
         comment.setPost(post.get());
 
-        commentRepository.save(comment);
+        comment = commentRepository.save(comment);
+
+        return comment;
     }
 
     @Override
@@ -58,5 +60,28 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public List<Comment> getCommentsByPostId(Long id) {
         return commentRepository.findByPostId(id);
+    }
+
+    @Override
+    public void deleteComment(Long id, String principal) throws Exception {
+        Comment comment = commentRepository.findById(id).orElseThrow();
+
+        if(!comment.getUser().getUserName().equalsIgnoreCase(principal))
+            throw new Exception("Cannot update comment by another user");
+
+        commentRepository.deleteById(id);
+    }
+
+    @Override
+    public Comment updateComment(CommentDto commentDto, Long id, String principal) throws Exception {
+        //get comment with id
+        Comment comment = commentRepository.findById(id).orElseThrow();
+
+        if(!comment.getUser().getUserName().equalsIgnoreCase(principal))
+            throw new Exception("Cannot update comment by another user");
+
+        comment.setComment(commentDto.getMessage());
+
+        return commentRepository.save(comment);
     }
 }

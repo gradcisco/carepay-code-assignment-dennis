@@ -2,11 +2,13 @@ Users in the system should be able to:
 -Sign up / create user.
 -Use the sign up details to obtain a valid JWT token to be used for other requests.
 -User management - Update user details{password only}
+
 -User should be able to post a blog.
--User should be able to update a blog post.
--User should be able to delete a blog post.
+-User should be able to update a blog post. If its owned by user.
+-User should be able to delete a blog post. If its owned by user.
 -User should be able to view all blog posts.
 -User should be able to view a blog post by its id.
+-View all blogs for a certain user.
 
 -User should be able to comment on a blog.
 -User should be able to see a blog and its comments.

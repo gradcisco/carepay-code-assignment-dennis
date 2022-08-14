@@ -13,12 +13,12 @@ public interface UserService {
     BlogUser createUser(UserRequest user);
 
     List<BlogUser> getUsers();
-     BlogUser updateUser(UserRequest userRequest,Long id);
+     BlogUser updateUser(UserRequest userRequest,Long id,String principal) throws Exception;
 
      BlogUser getUsersById(Long id);
 
      void deleteUsers();
 
-     void deleteUserById(Long id);
+     void deleteUserById(Long id,String principal) throws Exception;
 
 }

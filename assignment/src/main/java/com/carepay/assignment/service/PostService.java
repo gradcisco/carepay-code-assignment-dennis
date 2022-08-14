@@ -18,5 +18,9 @@ public interface PostService {
 
     PostDetails getPostDetails(Long id);
 
-    void deletePost(Long id);
+    void deletePost(Long id,String principal) throws Exception;
+
+    PostDetails updatePost(CreatePostRequest createPostRequest, String principal,Long id) throws Exception;
+
+    List<Post> getPostDetailsByUser(String postedby);
 }

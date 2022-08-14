@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -39,9 +40,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BlogUser updateUser(UserRequest userRequest,Long id) {
-        
+    public BlogUser updateUser(UserRequest userRequest,Long id,String principal) throws Exception {
+
         BlogUser user = userRepository.findById(id).orElseThrow();
+
+        //if blog belongs to another user
+        if(!user.getUserName().equalsIgnoreCase(principal))
+            throw new Exception("Cannot edit details for another user");
 
         user.setUserPassword(new BCryptPasswordEncoder().encode(userRequest.getUserPassword()));
         user = userRepository.save(user);
@@ -62,8 +67,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(Long id) {
+    public void deleteUserById(Long id,String principal) throws Exception {
 
+        BlogUser user = userRepository.findById(id).orElseThrow();
+
+        if(!user.getUserName().equalsIgnoreCase(principal))
+            throw new Exception("Cannot delete user not self");
         userRepository.deleteById(id);
     }
 }
