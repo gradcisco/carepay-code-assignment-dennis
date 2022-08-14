@@ -1,4 +1,5 @@
 package com.carepay.assignment.controller;
+import com.fasterxml.jackson.core.JsonParser;
 import com.hackerrank.test.utility.Order;
 import com.hackerrank.test.utility.OrderedTestRunner;
 import com.hackerrank.test.utility.ResultMatcher;
@@ -14,10 +15,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -75,12 +79,16 @@ public class JwtControllerTest {
                 "  \"username\": \"chris\"\n" +
                 "}";
 
-        mockMvc.perform(
+       MvcResult result = mockMvc.perform(
                         post("/login")
                                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                                 .content(json)
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andReturn();
+
+
+
+        System.out.println("***********************\n" + result.getResponse().getContentAsString().split(":")[1].replace("}","") + "\n\n\n************************");
     }
 
 
